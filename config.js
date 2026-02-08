@@ -8,7 +8,7 @@
 
 const GOOGLE_CONFIG = {
     CLIENT_ID: '31374902699-vd8icu45ha7uden93k8kl8mc6bsbql3l.apps.googleusercontent.com',
-    API_KEY: 'YOUR_NEW_API_KEY_HERE',  // ⚠️ Replace with NEW API key (old one was leaked)
+    API_KEY: 'AIzaSyCUILuS1xW08bwqfBQTcj0bFbme7NNRvf8',  // ⚠️ Replace with NEW API key (old one was leaked)
     DISCOVERY_DOCS: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
     SCOPES: 'https://www.googleapis.com/auth/drive.file'
 };
