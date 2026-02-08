@@ -1,0 +1,195 @@
+═══════════════════════════════════════════════════════════════
+🚀 QUICK START GUIDE - Life Tracker Enhanced
+═══════════════════════════════════════════════════════════════
+
+⏱️ TIME: 15 minutes to get running
+
+═══════════════════════════════════════════════════════════════
+STEP 1: GET A NEW API KEY (CRITICAL!)
+═══════════════════════════════════════════════════════════════
+
+Your old API key was leaked on GitHub and has been disabled.
+
+1. Go to: https://console.cloud.google.com/
+2. Select your "Life Tracker App" project
+3. Go to: APIs & Services → Credentials
+4. DELETE the old key (AIzaSyCQUVzf1r3kvGKZ5VTjKF-7tX6j3C6R0xY)
+5. Click: "+ CREATE CREDENTIALS" → "API key"
+6. COPY the new key immediately
+7. Click "RESTRICT KEY":
+   - Application restrictions: HTTP referrers
+   - Add: http://localhost:8080/*
+   - Add: https://yourusername.github.io/*
+   - API restrictions: Restrict to "Google Drive API"
+8. Click SAVE
+
+═══════════════════════════════════════════════════════════════
+STEP 2: SETUP FILES
+═══════════════════════════════════════════════════════════════
+
+1. Download ALL these files to your LifeTrackerApp folder:
+   ✅ life-tracker-ENHANCED.html
+   ✅ app-ENHANCED.js
+   ✅ config.js
+   ✅ config-template.js
+   ✅ .gitignore
+   ✅ service-worker.js (use your existing one)
+   ✅ manifest.json (use your existing one)
+   ✅ icon-192.png (use your existing one)
+   ✅ icon-512.png (use your existing one)
+
+2. RENAME the files:
+   life-tracker-ENHANCED.html → life-tracker.html
+   app-ENHANCED.js → app.js
+
+3. EDIT config.js:
+   - Open in Notepad
+   - Find line: API_KEY: 'YOUR_NEW_API_KEY_HERE'
+   - Replace with your NEW API key
+   - Save and close
+
+═══════════════════════════════════════════════════════════════
+STEP 3: TEST LOCALLY
+═══════════════════════════════════════════════════════════════
+
+1. Open Command Prompt/Terminal
+2. Navigate to folder:
+   cd C:\Users\YourName\Documents\LifeTrackerApp
+
+3. Start server:
+   python -m http.server 8080
+
+4. Open browser:
+   http://localhost:8080/life-tracker.html
+
+5. TEST all features:
+   ✅ Click tabs (Personal, Health, Religious Life, Professional)
+   ✅ Add an item
+   ✅ Edit an item (click Edit button)
+   ✅ Click "Enable Notifications" - you should get a test notification
+   ✅ Try adding a reminder
+   ✅ Check Religious Life tab - see Quran tracker, prayers
+   ✅ Check Health tab - see weight tracker, period tracker
+   ✅ Check Professional tab - see your timetable!
+
+═══════════════════════════════════════════════════════════════
+STEP 4: UPLOAD TO GITHUB SAFELY
+═══════════════════════════════════════════════════════════════
+
+IMPORTANT: The .gitignore file will protect config.js!
+
+1. Open GitHub Desktop or use git commands
+2. The .gitignore file will AUTOMATICALLY exclude config.js
+3. Only these files will be uploaded:
+   ✅ life-tracker.html
+   ✅ app.js
+   ✅ config-template.js (template only)
+   ✅ .gitignore
+   ✅ service-worker.js
+   ✅ manifest.json
+   ✅ icon-192.png
+   ✅ icon-512.png
+
+4. Commit and push to GitHub
+5. Your API key is SAFE (not uploaded)
+
+═══════════════════════════════════════════════════════════════
+STEP 5: CREATE NEW ANDROID APK
+═══════════════════════════════════════════════════════════════
+
+1. Go to: https://www.pwabuilder.com/
+2. Enter your GitHub Pages URL
+3. Click "Start"
+4. Click "Package For Stores" → Android
+5. Generate APK
+6. Download APK
+7. Transfer to phone and install
+
+═══════════════════════════════════════════════════════════════
+WHAT'S NEW & FIXED
+═══════════════════════════════════════════════════════════════
+
+✅ FIXED - Notifications now work properly
+✅ FIXED - Date issue (Feb 9 now saves as Feb 9)
+✅ ADDED - Edit button on all tasks
+✅ ADDED - Religious Life tab with:
+   - Quran memorization tracker (all 114 Surahs)
+   - Daily prayer tracker (5 prayers + Tahajjud)
+   - Ramadan tracker
+✅ ADDED - Enhanced Health tab:
+   - Period tracker with predictions
+   - Weight tracker with history
+   - 6 daily habits instead of 3
+✅ ADDED - Timetable-based lesson planning
+   - Based on YOUR actual schedule
+   - Monday-Friday, 7 periods
+   - Office periods marked
+✅ FIXED - API key security (separated into config.js)
+
+═══════════════════════════════════════════════════════════════
+UNDERSTANDING UPDATES
+═══════════════════════════════════════════════════════════════
+
+Q: If I change code on GitHub, does the Android app update?
+A: NO! You must:
+   1. Update code on GitHub
+   2. Generate NEW APK from PWABuilder
+   3. Install new APK on phone
+
+The website (GitHub Pages) updates automatically.
+The Android APK does NOT update automatically.
+
+═══════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+❌ "config.js not found" error
+→ Make sure config.js is in the same folder as life-tracker.html
+
+❌ Google Drive sync doesn't work
+→ Check you put the NEW API key in config.js
+→ Check you didn't upload config.js to GitHub
+
+❌ Notifications don't work
+→ Click "Enable Notifications" button
+→ Allow notifications when browser asks
+→ Test with a reminder set for 1 minute from now
+
+❌ Date saves as wrong day
+→ This is FIXED in the new version
+→ Make sure you're using app-ENHANCED.js renamed to app.js
+
+❌ No Edit button
+→ Make sure you're using the NEW version
+→ Check you renamed files correctly
+
+═══════════════════════════════════════════════════════════════
+SECURITY CHECKLIST
+═══════════════════════════════════════════════════════════════
+
+Before uploading to GitHub:
+
+□ Got NEW API key from Google Console
+□ Deleted OLD API key from Google Console
+□ Put NEW API key in config.js (local file only)
+□ .gitignore file is in the folder
+□ Tested that config.js is NOT uploaded (check GitHub website)
+□ config-template.js has placeholders (safe to upload)
+
+═══════════════════════════════════════════════════════════════
+NEXT STEPS
+═══════════════════════════════════════════════════════════════
+
+1. Get new API key (most important!)
+2. Setup files
+3. Test locally
+4. Upload to GitHub (config.js protected)
+5. Generate new APK
+6. Install on phone
+7. Enjoy your enhanced app!
+
+═══════════════════════════════════════════════════════════════
+
+🎉 YOU'RE ALL SET! 🎉
+
+═══════════════════════════════════════════════════════════════

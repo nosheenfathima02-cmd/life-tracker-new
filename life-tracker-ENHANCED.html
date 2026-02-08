@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Tracker - Enhanced</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f8f9fa;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.3s;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+        }
+
+        .tab-button.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .item.completed {
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .item-checkbox {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .item-content {
+            flex: 1;
+        }
+
+        .item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .item-details {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .item-deadline, .item-status {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 3px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn-edit {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-right: 5px;
+        }
+
+        .btn-delete, .btn-delete-small {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            background: #e9ecef;
+            border-radius: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .checkbox-item.completed {
+            background: #d4edda;
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .health-note {
+            background: #fff3cd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .note-date {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .note-content {
+            color: #856404;
+        }
+
+        .surah-item {
+            background: white;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .surah-item.memorized {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+
+        .surah-item.current {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .prayer-tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .prayer-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .prayer-box.prayed {
+            background: #d4edda;
+        }
+
+        .prayer-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .timetable {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        td.office {
+            background: #e9ecef;
+            color: #999;
+        }
+
+        .weight-tracker {
+            margin-top: 15px;
+        }
+
+        .weight-entry {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .weight-log {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .tabs {
+                overflow-x: scroll;
+            }
+            
+            .tab-button {
+                min-width: 100px;
+                font-size: 0.9em;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 Life Tracker - Enhanced</h1>
+            <p>Track your personal, health, religious, and professional life</p>
+            <div class="header-buttons">
+                <button class="btn" id="enable-notifications">🔔 Enable Notifications</button>
+                <button class="btn" id="sync-drive">☁️ Sync Google Drive</button>
+                <button class="btn" id="install-app" style="display:none;">📲 Install App</button>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="personal">👤 Personal</button>
+            <button class="tab-button" data-tab="health">💪 Health</button>
+            <button class="tab-button" data-tab="religious">🕌 Religious Life</button>
+            <button class="tab-button" data-tab="professional">💼 Professional</button>
+        </div>
+
+        <!-- Personal Tab -->
+        <div id="personal" class="tab-content active">
+            <div class="section">
+                <h3>📚 Education</h3>
+                <div id="education-list"></div>
+                <button class="btn-primary" id="add-education">+ Add Education Item</button>
+            </div>
+
+            <div class="section">
+                <h3>✈️ Visa Process</h3>
+                <div id="visa-list"></div>
+                <button class="btn-primary" id="add-visa">+ Add Visa Item</button>
+            </div>
+
+            <div class="section">
+                <h3>🚗 Driving License</h3>
+                <div id="license-list"></div>
+                <button class="btn-primary" id="add-license">+ Add License Item</button>
+            </div>
+
+            <div id="custom-categories"></div>
+            <button class="btn-secondary" id="add-custom-category">+ Add Custom Category</button>
+        </div>
+
+        <!-- Health Tab -->
+        <div id="health" class="tab-content">
+            <div class="section">
+                <h3>✅ Daily Habits</h3>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="habit-wakeup">
+                    <label>Woke up on time</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="habit-water">
+                    <label>Drank 8 glasses of water</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="habit-veg">
+                    <label>Ate at least one vegetable</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="habit-exercise">
+                    <label>Exercised (30+ minutes)</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="habit-meditation">
+                    <label>Meditated/Relaxed</label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="habit-sleep">
+                    <label>Got 7-8 hours sleep</label>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>⚖️ Weight Tracker</h3>
+                <div class="weight-tracker">
+                    <div class="weight-entry">
+                        <input type="number" id="weight-input" placeholder="Weight (kg)" step="0.1">
+                        <input type="date" id="weight-date">
+                        <button class="btn-primary" id="add-weight">Add</button>
+                    </div>
+                    <div id="weight-list"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>🩸 Period Tracker</h3>
+                <div>
+                    <label>Last Period Start Date:</label>
+                    <input type="date" id="period-start">
+                    <label>Cycle Length (days):</label>
+                    <input type="number" id="period-cycle" placeholder="28" value="28">
+                    <button class="btn-primary" id="save-period">Save</button>
+                    <div id="period-info" style="margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px; display: none;">
+                        <p id="next-period"></p>
+                        <p id="days-until"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>📝 Health Notes</h3>
+                <div id="health-notes-list"></div>
+                <button class="btn-primary" id="add-health-note">+ Add Health Note</button>
+            </div>
+        </div>
+
+        <!-- Religious Life Tab -->
+        <div id="religious" class="tab-content">
+            <div class="section">
+                <h3>📿 Daily Prayers</h3>
+                <div class="prayer-tracker">
+                    <div class="prayer-box" id="prayer-fajr">
+                        <div class="prayer-name">Fajr</div>
+                        <input type="checkbox" id="check-fajr">
+                    </div>
+                    <div class="prayer-box" id="prayer-dhuhr">
+                        <div class="prayer-name">Dhuhr</div>
+                        <input type="checkbox" id="check-dhuhr">
+                    </div>
+                    <div class="prayer-box" id="prayer-asr">
+                        <div class="prayer-name">Asr</div>
+                        <input type="checkbox" id="check-asr">
+                    </div>
+                    <div class="prayer-box" id="prayer-maghrib">
+                        <div class="prayer-name">Maghrib</div>
+                        <input type="checkbox" id="check-maghrib">
+                    </div>
+                    <div class="prayer-box" id="prayer-isha">
+                        <div class="prayer-name">Isha</div>
+                        <input type="checkbox" id="check-isha">
+                    </div>
+                    <div class="prayer-box" id="prayer-tahajjud">
+                        <div class="prayer-name">Tahajjud</div>
+                        <input type="checkbox" id="check-tahajjud">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>📖 Quran Memorization</h3>
+                <div>
+                    <label>Currently Memorizing:</label>
+                    <select id="current-surah">
+                        <option value="">Select Surah...</option>
+                    </select>
+                    <button class="btn-primary" id="mark-memorized">Mark as Memorized</button>
+                </div>
+                <div id="surah-list" style="margin-top: 20px; max-height: 400px; overflow-y: auto;"></div>
+            </div>
+
+            <div class="section">
+                <h3>🌙 Ramadan Tracker</h3>
+                <div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ramadan-fasting">
+                        <label>Fasting Today</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ramadan-suhoor">
+                        <label>Had Suhoor</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ramadan-iftar">
+                        <label>Had Iftar</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ramadan-taraweeh">
+                        <label>Prayed Taraweeh</label>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <label>Iftar Time:</label>
+                        <input type="time" id="ramadan-iftar-time">
+                        <button class="btn-secondary" id="save-iftar-time">Save Iftar Time</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Tab -->
+        <div id="professional" class="tab-content">
+            <div class="section">
+                <h3>🏫 School Tasks</h3>
+                <div id="school-list"></div>
+                <button class="btn-primary" id="add-school-task">+ Add School Task</button>
+            </div>
+
+            <div class="section">
+                <h3>📹 Video Creation</h3>
+                <div id="video-list"></div>
+                <button class="btn-primary" id="add-video-task">+ Add Video Task</button>
+            </div>
+
+            <div class="section">
+                <h3>👨‍👩‍👧‍👦 Family Information Updates</h3>
+                <div id="family-list"></div>
+                <button class="btn-primary" id="add-family-task">+ Add Family Task</button>
+            </div>
+
+            <div class="section">
+                <h3>🌐 Website Updates</h3>
+                <div id="website-list"></div>
+                <button class="btn-primary" id="add-website-task">+ Add Website Task</button>
+            </div>
+
+            <div class="section">
+                <h3>📱 Social Media</h3>
+                <div id="social-list"></div>
+                <button class="btn-primary" id="add-social-task">+ Add Social Task</button>
+            </div>
+
+            <div class="section">
+                <h3>📅 Weekly Timetable & Lesson Plans</h3>
+                <div class="timetable">
+                    <table id="timetable"></table>
+                </div>
+                <button class="btn-primary" id="add-timetable-lesson">+ Add Lesson to Timetable</button>
+            </div>
+
+            <div class="section">
+                <h3>⏰ Schedule Reminders</h3>
+                <div id="reminders-list"></div>
+                <button class="btn-primary" id="add-reminder">+ Add Reminder</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">×</span>
+            <h3 id="modal-title"></h3>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
